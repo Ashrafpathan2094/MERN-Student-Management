@@ -22,15 +22,32 @@ export const createStudent = async (req, res) => {
   }
 }
 
-export const updateStudent = async (req, res) => {
-  const studentDataFromForm = req.body;
+export const deleteStudent = async (req, res) => {
 
-  const newStudent = new StudentDataBase(studentDataFromForm);
-
-  try {
-    await newStudent.save();
-    return res.status(201).json(newStudent);
+  const id = req.params.id;
+  try { 
+    await StudentDataBase.findByIdAndRemove(id).exec();
+    return res.send("Successfully Deleted!");
   } catch (error) {
-    return res.status(409).json({ message: error.message });
+    return console.log(error);
   }
 }
+
+// export const updateStudent = async (req, res) => {
+//   const studentDataFromForm = req.body;
+
+
+//   const student = await Student.find(req.body.id)
+
+//   const newStudent = new StudentDataBase(studentDataFromForm);
+
+//   try {
+//     await newStudent.save();
+//     return res.status(201).json(newStudent);
+//   } catch (error) {
+//     return res.status(409).json({ message: error.message });
+//   }
+// }
+
+
+
