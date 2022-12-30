@@ -1,26 +1,36 @@
-import StudentDataBase  from "../models/student.js";
+import StudentDataBase from "../models/student.js";
 
-
-export const getStudents = async (req,res) => {
-    try{
-
-        const allStudents = await StudentDataBase.find();
-        res.status(200).json(allStudents);
-    } catch(error){
-        res.status(404).json({message: error.message});
-    }
+export const getStudents = async (_req, res) => {
+  try {
+    const allStudents = await StudentDataBase.find();
+    return res.status(200).json(allStudents);
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
+  }
 }
 
+export const createStudent = async (req, res) => {
+  const studentDataFromForm = req.body;
 
-export const createStudent = async (req,res) => {
-    const studentDataFromForm = req.body;
+  const newStudent = new StudentDataBase(studentDataFromForm);
 
-    const newStudent = new StudentDataBase(studentDataFromForm);
+  try {
+    await newStudent.save();
+    return res.status(201).json(newStudent);
+  } catch (error) {
+    return res.status(409).json({ message: error.message });
+  }
+}
 
-    try{
-        await newStudent.save();
-        res.status(201).json(newStudent);
-    }catch(error){
-        res.status(409).json({message: error.message});
-    }
+export const updateStudent = async (req, res) => {
+  const studentDataFromForm = req.body;
+
+  const newStudent = new StudentDataBase(studentDataFromForm);
+
+  try {
+    await newStudent.save();
+    return res.status(201).json(newStudent);
+  } catch (error) {
+    return res.status(409).json({ message: error.message });
+  }
 }
