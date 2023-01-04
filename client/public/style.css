@@ -5,3 +5,17 @@
     background-color: transparent;
 }
 
+body{
+    font-family: 'Roboto', sans-serif;
+}
+
+header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.button--head{
+    margin:10px;
+}

@@ -1,46 +1,58 @@
 import StudentDataBase from "../models/student.js";
+import { createStudentSchema, updateStudentSchema } from "../JoiSchemas/schemas.js";
 
-import Joi from "joi";
+import { getallStudents, deleteStudentById, updateStudentById, paginate } from "../services/quries.js";
 
-export const getStudents = async (_req, res) => {
+
+
+export const getStudents = async (req, res) => {
+
+
   try {
-    const allStudents = await StudentDataBase.find();
-    return res.status(200).json(allStudents);
+
+
+    // const page = parseInt((req.body.page));
+    const pageSize = parseInt((req.body.pageSize));
+
+    const field  = req.body.field || {}
+
+
+    const skip = (parseInt((req.body.page)) - 1) * (pageSize)
+
+    const result = await paginate(skip, pageSize, field)
+
+    console.log(result);
+
+    res.status(200).json({
+      status: "success",
+      count: result.length,
+      data: result,
+    });
+
   } catch (error) {
-    return res.status(404).json({ message: error.message });
+    console.log(error);
+    res.status(500).json({
+      status: "error",
+      message: "Server Error",
+    });
   }
-}
+};
 
+//   try {
 
-const studentSchema = Joi.object({
-  regNumber: Joi.number()
-    .min(1)
-    .max(99)
-    .required(),
+//     const allStudents = getallStudents();
+//     return res.status(200).json(allStudents);
+//   } catch (error) {
+//     return res.status(404).json({ message: error.message });
+//   }
+// }
 
-  name: Joi.string()
-    .min(4)
-    .max(30)
-    .required(),
-
-  grade: Joi.string()
-    .min(1)
-    .max(1)
-    .required()
-    .pattern(new RegExp('^[a-zA-Z]$')),
-
-  section: Joi.string()
-    .min(1)
-    .max(1)
-    .required()
-    .pattern(new RegExp('^[a-zA-Z]$'))
-})
 
 
 export const createStudent = async (req, res) => {
   const studentDataFromForm = req.body;
 
-  const { error, value } = studentSchema.validate(studentDataFromForm, { abortEarly: false })
+  const { error, value } = createStudentSchema.validate(studentDataFromForm, { abortEarly: false })
 
   if (error) {
     console.log(error);
@@ -59,9 +71,9 @@ export const createStudent = async (req, res) => {
 
 export const deleteStudent = async (req, res) => {
 
-  const id = req.params.id;
   try {
-    await StudentDataBase.findByIdAndRemove(id).exec();
+    const id = req.params.id;
+    await deleteStudentById({ _id: id });
     return res.send("Successfully Deleted!");
   } catch (error) {
     return console.log(error);
@@ -69,25 +81,6 @@ export const deleteStudent = async (req, res) => {
 }
 
 
-const updateStudentSchema = Joi.object({
-  regNumber: Joi.number()
-    .min(1)
-    .max(99),
-
-  name: Joi.string()
-    .min(4)
-    .max(30),
-
-  grade: Joi.string()
-    .min(1)
-    .max(1)
-    .pattern(new RegExp('^[a-zA-Z]$')),
-
-  section: Joi.string()
-    .min(1)
-    .max(1)
-    .pattern(new RegExp('^[a-zA-Z]$'))
-})
 
 export const updateStudent = async (req, res) => {
 
@@ -99,7 +92,7 @@ export const updateStudent = async (req, res) => {
     const id = req.params.id;
 
 
-    const data = await StudentDataBase.findByIdAndUpdate(id, updatedStudentData, { useFindAndModify: false })
+    const data = await updateStudentById({ _id: id }, { $set: { ...updatedStudentData } }, { useFindAndModify: false })
     if (!data) {
       return res.status(404).send({ message: `Cannot Update user with ${id}. Maybe user not found!` });
     }

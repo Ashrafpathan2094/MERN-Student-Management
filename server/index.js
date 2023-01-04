@@ -2,8 +2,10 @@ import express from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import cors from "cors";
-
+import adminRoutes from "./routes/admin.js";
 import studentRoutes from "./routes/student.js";
+import * as dotenv from 'dotenv';
+import protect from "./middleware/authMiddleware.js";
 
 const app = express();
 
@@ -11,9 +13,12 @@ app.use(bodyParser.json({ limit: "20mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "20mb", extended: true }));
 app.use(cors());
 
-app.use('/students', studentRoutes);
+app.use('/admin', adminRoutes);
 
-const CONNECTION_URL = "mongodb://Stark:Stark2094@ac-fjtscrl-shard-00-00.95ghcza.mongodb.net:27017,ac-fjtscrl-shard-00-01.95ghcza.mongodb.net:27017,ac-fjtscrl-shard-00-02.95ghcza.mongodb.net:27017/?ssl=true&replicaSet=atlas-11x3jt-shard-0&authSource=admin&retryWrites=true&w=majority";
+app.use(protect)
+app.use('/students', studentRoutes);
+dotenv.config()
+const CONNECTION_URL = process.env.MONGO_URL;
 
 const PORT = process.env.PORT || 5000;
 

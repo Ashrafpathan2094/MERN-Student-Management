@@ -3,24 +3,22 @@ import './App.css';
 import Header from "./components/heading.js";
 import ShowStudent from './components/showStudent';
 import CreateStudent from './components/createStudent.js';
+import { Route, Routes } from "react-router-dom";
 
 function App() {
   return (
-    <div className="container-fluid">
+    <>
 
       <Header />
-      <div className="row mt-5">
+      <Routes >
 
-        <div className="col-sm-12 col-md-12 col-lg-8" >
-          <ShowStudent />
-        </div>
+        <Route path="/" element={<ShowStudent />} />
 
-        <div  className="col-sm-12 col-md-12 col-lg-4 p-5">
-          <CreateStudent />
-        </div>
 
-      </div>
-    </div>
+        <Route path="create-student" element={<CreateStudent />} />
+      </Routes >
+    </>
+
   );
 }
 
