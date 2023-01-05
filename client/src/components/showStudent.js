@@ -17,7 +17,7 @@ export default function ShowStudent() {
     };
 
     const fetchStudentList = async () => {
-        const response = await axios.post("http://localhost:5000/students/getstudentdetail", { page: 1, pageSize: 5, field:{name:"NewUSer"} })
+        const response = await axios.post("http://localhost:5000/students/getstudentdetail", { page: 1, pageSize: 5, field:{} })
         setStudentList(response.data.data)
     }
     
