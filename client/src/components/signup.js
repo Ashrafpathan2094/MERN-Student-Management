@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 
 
 
@@ -23,6 +24,7 @@ import { useNavigate } from 'react-router-dom';
 
 function Signup() {
 
+    const navigate = useNavigate()
 
     const signUpSchema = yup.object().shape({
         email: yup.string()
@@ -50,41 +52,45 @@ function Signup() {
     });
 
 
-    const navigate = useNavigate()
 
     const formSubmit = async (data) => {
-
-        navigate("/")
+        console.log(data)
+        const response =await axios.post("http://localhost:5000/admin/register", data)
+        console.log(response)
+        navigate("/showstudents")
 
     }
 
     return (
+
         <MDBContainer fluid className='d-flex align-items-center justify-content-center bg-image' style={{ backgroundImage: 'url(https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp)' }}>
-            <div className='mask gradient-custom-3'></div>
-            <MDBCard className='m-5' style={{ maxWidth: '600px' }}>
-                <MDBCardBody className='px-5' onSubmit={handleSubmit(formSubmit)} >
-                    <h2 className="text-uppercase text-center mb-5" >Create an account</h2>
-                    <MDBInput wrapperClass='mb-4' label='Your Name' size='lg' id='form1' type='text' {...register("name")} />
-                    <span className="error-message">{errors.name?.message}</span>
+            <form onSubmit={handleSubmit(formSubmit)} >
+                <div className='mask gradient-custom-3'></div>
+                <MDBCard className='m-5' style={{ maxWidth: '600px' }}>
+                    <MDBCardBody className='px-5' >
+                        <h2 className="text-uppercase text-center mb-5" >Create an account</h2>
+                        <MDBInput wrapperClass='mb-4' label='Your Name' size='lg' id='form1' type='text' {...register("name")} />
+                        <span className="error-message">{errors.name?.message}</span>
 
-                    <MDBInput wrapperClass='mb-4' label='Your Email' size='lg' id='form2' type='email' {...register("email")} />
-                    <span className="error-message">{errors.email?.message}</span>
+                        <MDBInput wrapperClass='mb-4' label='Your Email' size='lg' id='form2' type='email' {...register("email")} />
+                        <span className="error-message">{errors.email?.message}</span>
 
-                    <MDBInput wrapperClass='mb-4' label='Password' size='lg' id='form3' type='password' {...register("password")} />
-                    <span className="error-message">{errors.password?.message}</span>
+                        <MDBInput wrapperClass='mb-4' label='Password' size='lg' id='form3' type='password' {...register("password")} />
+                        <span className="error-message">{errors.password?.message}</span>
 
-                    <MDBInput wrapperClass='mb-4' label='Repeat your password' size='lg' id='form4' type='password' {...register("repeatPassword")} />
-                    <span className="error-message">{errors.repeatPassword?.message}</span>
+                        <MDBInput wrapperClass='mb-4' label='Repeat your password' size='lg' id='form4' type='password' {...register("repeatPassword")} />
+                        <span className="error-message">{errors.repeatPassword?.message}</span>
 
-                    <div className='d-flex flex-row justify-content-center mb-4'>
-                        <MDBCheckbox name='flexCheck' id='flexCheckDefault' label='I agree all statements in Terms of service' />
-                    </div>
+                        <div className='d-flex flex-row justify-content-center mb-4'>
+                            <MDBCheckbox name='flexCheck' id='flexCheckDefault' label='I agree all statements in Terms of service' />
+                        </div>
 
-                    <p className="mb-5 pb-lg-2" style={{}}>Already have an account? <Link to="/" style={{ color: '#393f81' }}>Log-In Here.</Link></p>
+                        <p className="mb-5 pb-lg-2" style={{}}>Already have an account? <Link to="/" style={{ color: '#393f81' }}>Log-In Here.</Link></p>
 
-                    <MDBBtn className='mb-4 w-100 gradient-custom-4' size='lg'>Register</MDBBtn>
-                </MDBCardBody>
-            </MDBCard>
+                        <MDBBtn type="submit" className='mb-4 w-100 gradient-custom-4' size='lg'>Register</MDBBtn>
+                    </MDBCardBody>
+                </MDBCard>
+            </form>
         </MDBContainer>
     );
 }

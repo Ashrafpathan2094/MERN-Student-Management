@@ -14,6 +14,10 @@ function App() {
       <Routes >
 
         <Route path="/" element={<Login />} />
+    
+
+        <Route path="/show-students" element={<ShowStudent />} />
+
 
 
         <Route path="create-student" element={<CreateStudent />} />

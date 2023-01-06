@@ -15,7 +15,7 @@ app.use(cors());
 
 app.use('/admin', adminRoutes);
 
-app.use(protect)
+// app.use(protect)
 app.use('/students', studentRoutes);
 dotenv.config()
 const CONNECTION_URL = process.env.MONGO_URL;
