@@ -14,12 +14,13 @@ export const getStudents = async (req, res) => {
     // const page = parseInt((req.body.page));
     const pageSize = parseInt((req.body.pageSize));
 
-    const field  = req.body.field || {}
+    const field = req.body.field || {}
 
 
     const skip = (parseInt((req.body.page)) - 1) * (pageSize)
 
     const result = await paginate(skip, pageSize, field)
+
 
     console.log(result);
 

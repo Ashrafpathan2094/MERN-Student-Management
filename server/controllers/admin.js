@@ -45,8 +45,4 @@ export const loginAdmin = async (req, res) => {
 
         return res.status(409).json({ message: error.message, admin: false });
     }
-
-
-
-
 }
